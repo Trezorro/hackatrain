@@ -3,8 +3,12 @@ Routes and views for the flask application.
 """
 
 from datetime import datetime
-from flask import render_template
+from flask import Flask, render_template
 from TrainTinder import app
+import pyreadr
+api = Flask(__name__)
+
+
 
 @app.route('/')
 @app.route('/home')
@@ -16,22 +20,13 @@ def home():
         year=datetime.now().year,
     )
 
-@app.route('/contact')
-def contact():
-    """Renders the contact page."""
-    return render_template(
-        'contact.html',
-        title='Contact',
-        year=datetime.now().year,
-        message='Your contact page.'
-    )
 
-@app.route('/about')
-def about():
-    """Renders the about page."""
-    return render_template(
-        'about.html',
-        title='About',
-        year=datetime.now().year,
-        message='Your application description page.'
-    )
+
+
+
+@api.route('/request', methods=['GET'])
+def get_teams():
+    result = pyreadr.read_r('TrainTinder/data/ut_2018-05-07.RData') # also works for Rds
+    response = result["data_vloerveld"]
+    return Response( json.dumps(response),mimetype = "application/json")
+
