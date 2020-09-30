@@ -14,10 +14,23 @@
             request a meeting point
         </h2>
         <p>
-           meat? meet? vermieten!!
+            meat? meet? vermieten!!
         </p>
-        <p><a class="btn btn-default" href="/request">Data !!!!</a></p>
+        <div id="stationmap" class="station-map"></div>
+
     </div>
 </div>
+<script type="text/javascript">
+    var mymap = L.map('stationmap').setView([52.089, 5.107], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(mymap);
+
+    L.marker([52.089, 5.107]).addTo(mymap)
+        .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+        .openPopup();
+</script>
 
 {% endblock %}
+
+ 

@@ -40,3 +40,8 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+.station-map {
+    height: 800px;
+    width: 600px;
+}
