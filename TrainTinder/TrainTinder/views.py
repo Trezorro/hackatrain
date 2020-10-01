@@ -24,9 +24,6 @@ def home():
     )
 
 
-
-
-@app.route('/')
 @api.route('/request', methods=['GET'])
 def get_teams():
     df = pd.read_csv("TrainTinder/data/ut_2018-05-07.csv", index_col=1).rename(columns={"Unnamed: 0": 'row'})
@@ -35,3 +32,5 @@ def get_teams():
 
     return Response( json.dumps(response),mimetype = "application/json")
 
+if __name__ == '__main__':
+    api.run()
