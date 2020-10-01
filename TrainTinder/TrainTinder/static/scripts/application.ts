@@ -7,7 +7,7 @@ class RequestService {
     }
 
     public get<T>(path: string, query?: any, resolve?: (response: T) => any, reject?: (error: any) => any) {
-        this.sendAsync('get', path, query,undefined, resolve, reject);
+        this.sendAsync('get', path, query, undefined, resolve, reject);
     }
 
 
@@ -37,7 +37,7 @@ class RequestService {
 
         self.client.open(method, url);
 
-        self.client.onload = function() {
+        self.client.onload = function () {
             if (this.status >= 200 && this.status < 400) {
                 // Success!
                 const data = JSON.parse(this.response) as Response;
@@ -56,7 +56,7 @@ class RequestService {
                 'Content-Type',
                 'application/x-www-form-urlencoded; charset=UTF-8');
         }
-       
+
         this.client.send(payload);
     }
 }
@@ -65,6 +65,11 @@ class HeatMap {
     public weight: number;
     public start: number[];
     public end: number[];
+}
+
+class GeoPoint {
+   public  lat: number;
+    public lon: number;
 }
 
 class OpenStreetMap {
@@ -80,7 +85,7 @@ class OpenStreetMap {
             {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(this.streetMap);
-       
+
     }
 
     public placeMarker = (lat: number, long: number, tag: string): void => {
@@ -93,12 +98,24 @@ class OpenStreetMap {
         let poly = this.l.polygon([
             [box.start[0], box.start[1]],
             [box.end[0], box.end[1]]
-        ])
-        poly.setStyle({ fillColor: '#FF0000' });
-        poly.setStyle({ color: '#FF0000' });
+        ]);
+        var color = '#FF0000';
+        if (box.weight < 0.7) {
+            color = '#550000';
+        }
+        if (box.weight < 0.3) {
+            color = '#00FF00';
+        }
 
+        poly.setStyle({ fillColor: color });
+            poly.setStyle({ color: color });
+        
 
         poly.addTo(this.streetMap);
+    }
+
+    public panTo = (point:GeoPoint):void => {
+        this.streetMap.panTo(new this.l.LatLng(point.lat, point.lon));
     }
 }
 
@@ -107,8 +124,9 @@ class MeetingPointApplication {
 
     public heatMapService: RequestService;
     public stationMap: OpenStreetMap;
-
-    constructor(l: any) {
+    
+    constructor(private l: any) {
+    
         this.heatMapService = new RequestService('http://localhost:5555');
         this.stationMap = this.stationMap = new OpenStreetMap(l);
     }
@@ -117,14 +135,17 @@ class MeetingPointApplication {
         this.stationMap.initializeMap(52.0883, 5.11);
     }
 
-    public requestMeetingPoint = (): void => {
-        this.heatMapService.get<any>("/meet",undefined, () => {
-            this.stationMap.placeMarker();
+    public requestMeetingPoint = (timestamp: Date): void => {
+        this.heatMapService.get<GeoPoint>("/meet", {
+            timestamp: timestamp.toISOString()
+        }, (response) => {
+            this.stationMap.placeMarker(response.lat, response.lon, "Ready to meet!!!");
+                this.stationMap.panTo(response);
         });
     }
 
 
-    public requestOccupancy= (timestamp: Date): void => {
+    public requestOccupancy = (timestamp: Date): void => {
         this.heatMapService.get<HeatMap[]>("/map",
             {
                 timestamp: timestamp.toISOString()

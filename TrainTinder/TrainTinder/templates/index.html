@@ -13,14 +13,16 @@
 </div>
 
 <script type="text/javascript">
+    var time = new Date("2018-05-07T08:00:00");
     function placeMarker() {
-        let box = {
-            left: { lat: 52.0882596, long: 5.1100644 },
-            right: { lat: 52.0883596, long: 5.1100648 }
-        };
-        //application.stationMap.placeMarker(52.0883, 5.11, 'Ready to meet!!.');
-        application.requestOccupancy(new Date("2018-05-07T08:00:00"));
-
+        application.requestMeetingPoint(time);
     }
+
+    setInterval(() => {
+            time = new Date(time.setSeconds(time.getSeconds() + 3));
+        application.requestOccupancy(time);
+        },
+        3000);
+    
 </script>
 {% endblock %}
