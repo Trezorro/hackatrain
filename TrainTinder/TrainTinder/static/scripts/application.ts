@@ -7,7 +7,7 @@ class RequestService {
     }
 
     public get<T>(path: string, query?: any, resolve?: (response: T) => any, reject?: (error: any) => any) {
-        this.sendAsync('get',path, query, resolve, reject);
+        this.sendAsync('get', path, query,undefined, resolve, reject);
     }
 
 
@@ -56,16 +56,15 @@ class RequestService {
                 'Content-Type',
                 'application/x-www-form-urlencoded; charset=UTF-8');
         }
+       
         this.client.send(payload);
     }
 }
 
 class HeatMap {
     public weight: number;
-    public lat_start: number;
-    public lon_start: number;
-    public lat_end: number;
-    public lon_end: number;
+    public start: number[];
+    public end: number[];
 }
 
 class OpenStreetMap {
@@ -81,7 +80,7 @@ class OpenStreetMap {
             {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(this.streetMap);
-        // this.placeMarker(52.089, 5.107, 'A pretty CSS3 popup.<br> Easily customizable.');
+       
     }
 
     public placeMarker = (lat: number, long: number, tag: string): void => {
@@ -92,8 +91,8 @@ class OpenStreetMap {
 
     public drawBox = (box: HeatMap): void => {
         let poly = this.l.polygon([
-            [box.lat_start, box.lon_start],
-            [box.lat_end, box.lon_end]
+            [box.start[0], box.start[1]],
+            [box.end[0], box.end[1]]
         ])
         poly.setStyle({ fillColor: '#FF0000' });
         poly.setStyle({ color: '#FF0000' });
@@ -110,7 +109,7 @@ class MeetingPointApplication {
     public stationMap: OpenStreetMap;
 
     constructor(l: any) {
-        this.heatMapService = new RequestService('http://localhost:5555/request');
+        this.heatMapService = new RequestService('http://localhost:5555');
         this.stationMap = this.stationMap = new OpenStreetMap(l);
     }
 
@@ -119,20 +118,21 @@ class MeetingPointApplication {
     }
 
     public requestMeetingPoint = (): void => {
-        this.heatMapService.get<any>("/meet");
+        this.heatMapService.get<any>("/meet",undefined, () => {
+            this.stationMap.placeMarker();
+        });
     }
 
 
     public requestOccupancy= (timestamp: Date): void => {
         this.heatMapService.get<HeatMap[]>("/map",
             {
-                timestamp:timestamp
+                timestamp: timestamp.toISOString()
             },
-            response => {
+            (response) => {
                 for (var block of response) {
                     this.stationMap.drawBox(block);
                 }
-
             });
     }
 }

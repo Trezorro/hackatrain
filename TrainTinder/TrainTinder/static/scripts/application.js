@@ -4,7 +4,7 @@ var RequestService = /** @class */ (function () {
         this.client = new XMLHttpRequest();
     }
     RequestService.prototype.get = function (path, query, resolve, reject) {
-        this.sendAsync('get', path, query, resolve, reject);
+        this.sendAsync('get', path, query, undefined, resolve, reject);
     };
     RequestService.prototype.createQueryParams = function (query) {
         var params = new URLSearchParams("");
@@ -67,8 +67,8 @@ var OpenStreetMap = /** @class */ (function () {
         };
         this.drawBox = function (box) {
             var poly = _this.l.polygon([
-                [box.lat_start, box.lon_start],
-                [box.lat_end, box.lon_end]
+                [box.start[0], box.start[1]],
+                [box.end[0], box.end[1]]
             ]);
             poly.setStyle({ fillColor: '#FF0000' });
             poly.setStyle({ color: '#FF0000' });
@@ -88,7 +88,7 @@ var MeetingPointApplication = /** @class */ (function () {
         };
         this.requestOccupancy = function (timestamp) {
             _this.heatMapService.get("/map", {
-                timestamp: timestamp
+                timestamp: timestamp.toISOString()
             }, function (response) {
                 for (var _i = 0, response_1 = response; _i < response_1.length; _i++) {
                     var block = response_1[_i];
@@ -96,7 +96,7 @@ var MeetingPointApplication = /** @class */ (function () {
                 }
             });
         };
-        this.heatMapService = new RequestService('http://localhost:5555/request');
+        this.heatMapService = new RequestService('http://localhost:5555');
         this.stationMap = this.stationMap = new OpenStreetMap(l);
     }
     return MeetingPointApplication;
