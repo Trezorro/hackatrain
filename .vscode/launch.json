@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "flask",
             "env": {
-                "FLASK_APP": "runserver.py",
+                "FLASK_APP": "TrainTinder/runserver.py",
                 "FLASK_ENV": "development",
                 "FLASK_DEBUG": "0"
             },
