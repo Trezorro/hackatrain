@@ -4,44 +4,64 @@ body {
 }
 
 /* Set padding to keep content from hitting the edges */
+
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
+
 input,
 select,
-textarea {
-    max-width: 280px;
-}
+textarea { max-width: 280px; }
 
 /* styles for validation helpers */
-.field-validation-error {
-    color: #b94a48;
+
+.field-validation-error { color: #b94a48; }
+
+.field-validation-valid { display: none; }
+
+input.input-validation-error { border: 1px solid #b94a48; }
+
+input[type="checkbox"].input-validation-error { border: 0 none; }
+
+.validation-summary-errors { color: #b94a48; }
+
+.validation-summary-valid { display: none; }
+
+.mobile-phone {
+    width: 640px;
+    height: 640px;
+    background-image: url("../images/background.png");
+    padding: 52px 180px;
 }
 
-.field-validation-valid {
-    display: none;
+.mobile-phone .station-map {
+    height: 497px;
+    width: 270px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
 
-input.input-validation-error {
-    border: 1px solid #b94a48;
+.mobile-phone .app-menu {
+    height: 47px;
+    width: 270px;
+    display: flex;
+    flex-direction: row;
+    -ms-border-bottom-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    -ms-border-bottom-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-image: url("../images/menu.png");
 }
 
-input[type="checkbox"].input-validation-error {
-    border: 0 none;
+.mobile-phone .app-menu .menu-button {
+    width: 25%;
+    height: 100%;
 }
 
-.validation-summary-errors {
-    color: #b94a48;
-}
-
-.validation-summary-valid {
-    display: none;
-}
-
-.station-map {
-    height: 800px;
-    width: 600px;
+.mobile-phone .app-menu .menu-button:hover {
+    background-color: white;
+    opacity: 0.2;                      
 }
