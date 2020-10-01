@@ -2,10 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\TrainTinder",
-    "\\TrainTinder\\obj\\Debug",
     "\\TrainTinder\\TrainTinder",
+    "\\TrainTinder\\TrainTinder\\static",
+    "\\TrainTinder\\TrainTinder\\static\\content",
     "\\TrainTinder\\TrainTinder\\templates"
   ],
-  "SelectedNode": "\\TrainTinder\\TrainTinder\\views.py",
+  "SelectedNode": "\\TrainTinder\\runserver.py",
   "PreviewInSolutionExplorer": false
 }
