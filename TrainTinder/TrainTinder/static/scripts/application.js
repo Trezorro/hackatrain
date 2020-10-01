@@ -116,7 +116,7 @@ var MeetingPointApplication = /** @class */ (function () {
                 }
             });
         };
-        this.heatMapService = new RequestService('http://localhost:5555');
+        this.heatMapService = new RequestService('http://trezorro.eu.pythonanywhere.com');
         this.stationMap = this.stationMap = new OpenStreetMap(l);
     }
     return MeetingPointApplication;
