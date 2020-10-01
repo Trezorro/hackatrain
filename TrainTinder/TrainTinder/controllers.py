@@ -82,3 +82,19 @@ def get_map_blocks():
         })
 
     return Response( json.dumps(result),mimetype = "application/json")
+
+@app.route('/meet', methods=['GET'])
+def meet():
+    timestamp = request.args.get('timestamp')
+    print("meet at:", timestamp)
+
+    blocks = list_block_names()
+    df = pd.read_csv("TrainTinder/data/ut_2018-05-07.csv", index_col=1).rename(columns={"Unnamed: 0": 'row'})
+    df.index = pd.to_datetime(df.index, infer_datetime_format=True)
+    min_weight_block = df.loc[timestamp, blocks].idxmin()
+    coords = list(coordinate_tuples())
+    min_coord = coords[blocks.index(min_weight_block)]
+    lat = (min_coord[1][0] + min_coord[0][0]) / 2
+    lon = (min_coord[1][1] + min_coord[0][1]) / 2
+    return Response( json.dumps({'lat': lat, 'lon': lon}),mimetype = "application/json")
+
