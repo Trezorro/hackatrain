@@ -70,7 +70,7 @@ def get_map_blocks():
     timestamp = request.args.get('timestamp')
     print(timestamp)
     blocks = list_block_names()
-    df = pd.read_csv("TrainTinder/data/ut_2018-05-07.csv", index_col=1).rename(columns={"Unnamed: 0": 'row'})
+    df = pd.read_csv("mysite/hackatrain/TrainTinder/data/ut_2018-05-07.csv", index_col=1).rename(columns={"Unnamed: 0": 'row'})
     df.index = pd.to_datetime(df.index, infer_datetime_format=True)
     weights = df.loc[timestamp, blocks]
     result = []
@@ -89,7 +89,7 @@ def meet():
     print("meet at:", timestamp)
 
     blocks = list_block_names()
-    df = pd.read_csv("TrainTinder/data/ut_2018-05-07.csv", index_col=1).rename(columns={"Unnamed: 0": 'row'})
+    df = pd.read_csv("mysite/hackatrain/TrainTinder/data/ut_2018-05-07.csv", index_col=1).rename(columns={"Unnamed: 0": 'row'})
     df.index = pd.to_datetime(df.index, infer_datetime_format=True)
     min_weight_block = df.loc[timestamp, blocks].idxmin()
     coords = list(coordinate_tuples())
